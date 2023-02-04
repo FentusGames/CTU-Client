@@ -1,0 +1,50 @@
+package ctu.client;
+
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
+
+import javax.net.SocketFactory;
+
+import ctu.core.abstracts.CTU;
+import ctu.core.abstracts.Connection;
+
+
+public class CTUClient extends CTU {
+	private ConnectionClient connection;
+	private boolean success = false;
+
+	@Override
+	public void exec() {
+		System.out.println("Connecting...");
+
+		try {
+			setSocket(SocketFactory.getDefault().createSocket(getConfig().IP_ADDRESS, getConfig().PORT));
+			success = true;
+		} catch (final ConnectException e) {
+			System.out.println("Could not connect to server, connection refused.");
+		} catch (final UnknownHostException e) {
+			e.printStackTrace();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (success) {
+				connection = new ConnectionClient(this);
+
+				connection.run();
+
+				executorStop();
+
+				System.exit(0);
+			}
+		}
+	}
+
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public Connection getConnection() {
+		return connection;
+	}
+}
