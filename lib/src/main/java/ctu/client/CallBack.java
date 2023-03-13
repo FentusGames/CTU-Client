@@ -5,16 +5,10 @@ public abstract class CallBack implements Runnable {
 
 	@Override
 	public void run() {
-		if (success) {
-			pass();
-		} else {
-			fail();
-		}
+		callback(success);
 	}
 
-	public abstract void fail();
-
-	public abstract void pass();
+	public abstract void callback(boolean success);
 
 	public void setSuccess(boolean success) {
 		this.success = success;
