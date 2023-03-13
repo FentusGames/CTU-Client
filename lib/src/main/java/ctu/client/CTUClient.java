@@ -9,10 +9,14 @@ import javax.net.SocketFactory;
 import ctu.core.abstracts.CTU;
 import ctu.core.abstracts.Connection;
 
-
 public class CTUClient extends CTU {
 	private ConnectionClient connection;
 	private boolean success = false;
+	private CallBack callback;
+
+	public void setCallback(CallBack callback) {
+		this.callback = callback;
+	}
 
 	@Override
 	public void exec() {
@@ -28,7 +32,11 @@ public class CTUClient extends CTU {
 		} catch (final IOException e) {
 			e.printStackTrace();
 		} finally {
+			callback.setSuccess(success);
+
 			if (success) {
+				getExecutorService().execute(callback);
+
 				connection = new ConnectionClient(this);
 
 				connection.run();
@@ -36,12 +44,10 @@ public class CTUClient extends CTU {
 				executorStop();
 
 				System.exit(0);
+			} else {
+				getExecutorService().execute(callback);
 			}
 		}
-	}
-
-	public boolean isSuccess() {
-		return success;
 	}
 
 	public Connection getConnection() {
