@@ -1,8 +1,6 @@
 package ctu.client;
 
-import ctu.core.threads.CTURunnable;
-
-public abstract class CallBack extends CTURunnable {
+public abstract class CallBack implements Runnable {
 	private boolean success;
 
 	@Override
