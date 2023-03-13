@@ -3,7 +3,6 @@ package ctu.client;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
-import java.util.concurrent.ExecutorService;
 
 import javax.net.SocketFactory;
 
@@ -34,10 +33,9 @@ public class CTUClient extends CTU {
 			e.printStackTrace();
 		} finally {
 			callback.setSuccess(success);
-			ExecutorService executorService = getExecutorService();
 
 			if (success) {
-				executorService.execute(callback);
+				execute(callback);
 
 				connection = new ConnectionClient(this);
 
@@ -47,7 +45,7 @@ public class CTUClient extends CTU {
 
 				System.exit(0);
 			} else {
-				executorService.execute(callback);
+				execute(callback);
 			}
 		}
 	}
